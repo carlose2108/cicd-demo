@@ -13,4 +13,4 @@ images:
 - us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest
 
 options:
-logging: CLOUD_LOGGING_ONLY
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
