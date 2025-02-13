@@ -11,6 +11,7 @@ steps:
   args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}']
 images:
 - us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest
+
 build:
   options:
     defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
