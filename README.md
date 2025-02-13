@@ -1,2 +1,2 @@
 # cicd-demo
-This is a repository for CI/CD demo
+This is a CI/CD repository for tsting purpose. 
