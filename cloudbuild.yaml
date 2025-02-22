@@ -27,13 +27,12 @@ steps:
   entrypoint: gcloud
   args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}']
 
+# Upload test results (using gsutil directly for more control)
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', '${_REPO_NAME}/test-results.xml', 'gs://cicd-reports-${_PROJECT_ID}/test-results/']
+
 images:
 - us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
-
-artifacts:
-  objects:
-    location: 'gs://cicd-reports-${_PROJECT_ID}/test-results/'
-    paths: ['test-results.xml']
