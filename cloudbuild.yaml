@@ -2,7 +2,7 @@ steps:
 # Clone the repository from GitHub
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone', 'https://github.com/${_GITHUB_REPO}.git', '--branch=${_GITHUB_BRANCH}', '--depth=1']
-  name: 'Clone Repository'
+  name: 'Clone'
 
 # Run unit tests using pytest with coverage enforcement
 - name: 'python:3.12'
