@@ -11,8 +11,8 @@ steps:
     - |
       cd ${_REPO_NAME}
       pip install -r requirements.txt
-      pip install pytest pytest-cov
       pytest tests/ --junitxml=test-results.xml --cov=app --cov-report=term-missing --cov-fail-under=50
+      ls -l
 
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
