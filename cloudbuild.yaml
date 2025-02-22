@@ -2,6 +2,7 @@ steps:
 # Clone the repository from GitHub
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone', 'https://github.com/${_GITHUB_REPO}.git', '--branch=${_GITHUB_BRANCH}', '--depth=1']
+  name: 'Clone Repository'
 
 # Run unit tests using pytest with coverage enforcement
 - name: 'python:3.12'
@@ -13,23 +14,28 @@ steps:
       pip install -r requirements.txt
       pytest tests/ --junitxml=test-results.xml --cov=app --cov-report=term-missing --cov-fail-under=70
       ls -l
+  name: 'Run Unit Tests'
 
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '.']
+  name: 'Build Image'
 
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest']
+  name: 'Push Image'
 
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}']
+  name: 'Deploy Image'
 
 # Upload test results
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['cp', '${_REPO_NAME}/test-results.xml', 'gs://cicd-reports-${_PROJECT_ID}/test-results/']
+  name: 'Upload Results to Cloud Storage'
 
 images:
 - us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest
