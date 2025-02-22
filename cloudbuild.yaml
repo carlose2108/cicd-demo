@@ -1,16 +1,39 @@
 steps:
+# Clone the repository from GitHub
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', 'https://github.com/${_GITHUB_REPO}.git', '--branch=${_GITHUB_BRANCH}', '--depth=1']
+
+# Run unit tests using pytest with coverage enforcement
+- name: 'python:3.12'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      cd ${_REPO_NAME}
+      pip install -r requirements.txt
+      pip install pytest pytest-cov
+      pytest tests/ --junitxml=test-results.xml --cov=app --cov-report=term-missing --cov-fail-under=50
+
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '.']
+
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest']
+
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}']
+
 images:
 - us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+artifacts:
+  objects:
+    location: 'gs://cicd-reports-${_PROJECT_ID}/test-results/'
+    paths: ['test-results.xml']
