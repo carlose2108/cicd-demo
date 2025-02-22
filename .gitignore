@@ -2,3 +2,9 @@
 __pycache__
 venv
 model/
+data/
+terraform/terraform_credentails.json
+cicd_venv
+gcp-mlops-v2.json
+mlops_on_gcp
+terraform
