@@ -12,7 +12,7 @@ json_payload = json.dumps({
 def predict(payload: str):
     try:
         # URL
-        base_url = "https://api-demo-cicd-807455101353.us-central1.run.app"
+        base_url = "https://api-demo-cicd-807455101353.us-central1.run.app"  # Replace URL
         url = f"{base_url}/invoice_risk"
         # Header
         headers = {

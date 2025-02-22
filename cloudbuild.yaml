@@ -11,7 +11,7 @@ steps:
     - |
       cd ${_REPO_NAME}
       pip install -r requirements.txt
-      pytest tests/ --junitxml=test-results.xml --cov=app --cov-report=term-missing --cov-fail-under=50
+      pytest tests/ --junitxml=test-results.xml --cov=app --cov-report=term-missing --cov-fail-under=70
       ls -l
 
 # Build the container image
@@ -27,7 +27,7 @@ steps:
   entrypoint: gcloud
   args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}']
 
-# Upload test results (using gsutil directly for more control)
+# Upload test results
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['cp', '${_REPO_NAME}/test-results.xml', 'gs://cicd-reports-${_PROJECT_ID}/test-results/']
 
