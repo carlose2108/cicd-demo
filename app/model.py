@@ -144,7 +144,7 @@ class Model:
             invoices_to_predict = dataframe[dataframe["invoiceId"].isin(invoice_ids)].drop(columns=["invoiceId"])
 
             if "Unnamed: 0" in dataframe.columns:
-                invoices_to_predict = dataframe.drop(columns=["Unnamed: 0"])
+                invoices_to_predict = invoices_to_predict.drop(columns=["Unnamed: 0"])
 
             invoices_to_predict = self.scaler.fit_transform(invoices_to_predict)
 
