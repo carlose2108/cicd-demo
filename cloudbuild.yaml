@@ -1,5 +1,5 @@
 steps:
-# Retrieve Gemini API key from Secret Manager and save it in a .env file
+# Retrieve Gemini API Key from Secret Manager and store it in an environment variable
 - id: 'Retrieve Gemini API Key'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
@@ -7,8 +7,8 @@ steps:
     - '-c'
     - |
       echo "Retrieving Gemini API key..."
-      SECRET_VALUE=$(gcloud secrets versions access latest --secret=gemini-sa-key --project=${_PROJECT_ID})
-      echo "GEMINI_API_KEY=${SECRET_VALUE}" > .env
+      gcloud secrets versions access latest --secret=gemini-sa-key --project=${_PROJECT_ID} > gemini-key.json
+      echo "Gemini API key stored in gemini-key.json"
 
 # Clone the repository from GitHub
 - id: 'Clone Repository'
@@ -41,7 +41,7 @@ steps:
 - id: 'Deploy Image'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-env-vars', 'PROJECT_ID=${_PROJECT_ID}']
+  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-env-vars', 'GEMINI_API_KEY=$(gcloud secrets versions access latest --secret=gemini-sa-key --project=${_PROJECT_ID})']
 
 # Upload test results
 - id: 'Upload Results to Cloud Storage'
