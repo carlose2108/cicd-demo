@@ -59,7 +59,7 @@ def rag():
         print("Google API Key not found!")
 
     # Extract text from PDF
-    relative_pdf_path = "data/attention_is_all_you_need.pdf"
+    relative_pdf_path = "data/attention_is_all_you_need1.pdf"
     absolute_pdf_path = os.path.abspath(relative_pdf_path)
     pdf_loader = PyPDFLoader(absolute_pdf_path)
     pages = pdf_loader.load_and_split()

@@ -9,10 +9,7 @@ from app.api import init_app
 
 from fastapi import status
 
-from langchain_google_genai import ChatGoogleGenerativeAI
 
-GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', "None")
-print("GOOGLE_API_KEY: ", GOOGLE_API_KEY)
 app = init_app()
 
 
