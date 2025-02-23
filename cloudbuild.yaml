@@ -5,12 +5,12 @@ availableSecrets:
 
 steps:
 # Clone the repository from GitHub
-- id: 'Clone Repository'
+- id: 'Cloning Repository...'
   name: 'gcr.io/cloud-builders/git'
   args: ['clone', 'https://github.com/${_GITHUB_REPO}.git', '--branch=${_GITHUB_BRANCH}', '--depth=1']
 
 # Run unit tests using pytest with coverage enforcement
-- id: 'Run Unit Tests'
+- id: 'Running Unit Tests...'
   name: 'python:3.12'
   entrypoint: 'bash'
   args:
@@ -22,17 +22,17 @@ steps:
       ls -l
 
 # Build the container image
-- id: 'Build Image'
+- id: 'Building Image...'
   name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '.']
 
 # Push the container image to Container Registry
-- id: 'Push Image'
+- id: 'Pushing Image...'
   name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest']
 
 # Deploy container image to Cloud Run
-- id: 'Deploy Image...'
+- id: 'Deploying Image...'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-env-vars', 'GOOGLE_API_KEY=${_GOOGLE_API_KEY}']
