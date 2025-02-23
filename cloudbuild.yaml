@@ -9,6 +9,8 @@ steps:
       echo "Retrieving Google API key..."
       GOOGLE_API_KEY=$(gcloud secrets versions access latest --secret=google-api-key --project=${_PROJECT_ID})
       echo "Google API key retrieved"
+      # Make the key available to subsequent steps by exporting it as an environment variable
+      echo "GOOGLE_API_KEY=${GOOGLE_API_KEY}" >> $DEVSHELL_ENVIRONMENT
 
 
 # Clone the repository from GitHub
