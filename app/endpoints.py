@@ -35,6 +35,11 @@ def predict(payload: InvoicePayload) -> Dict[str, Any]:
 
 @app.post("/generate_response", response_model=ModelResponse, status_code=status.HTTP_200_OK)
 def generate_response(user_query: UserInput):
+    """
+    Generate response from RAG system
+    :param user_query:
+    :return:
+    """
     response = app.qa_chain.invoke({"query": user_query.query})
     response = ModelResponse(response=response['result'])
     return response
