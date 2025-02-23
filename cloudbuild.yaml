@@ -43,7 +43,7 @@ steps:
   args: ['push', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest']
 
 # Deploy container image to Cloud Run
-- id: "Deploying Image..."
+- id: "Deploying Image...."
   name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
   entrypoint: "bash"
   args:
