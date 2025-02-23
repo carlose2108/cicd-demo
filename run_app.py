@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 from app.model import Model
@@ -8,6 +9,11 @@ from app.endpoints import app
 
 
 def main():
+    # Service account setup (using environment variable)
+    service_account_json = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+    print("Service Account:")
+    print(service_account_json)
+
     dataframe = pd.read_csv("data/dataTest.csv")
     dataframe = dataframe.drop(columns=["Unnamed: 0"])
 

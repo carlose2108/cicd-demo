@@ -42,3 +42,10 @@ images:
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+secrets:
+- name: 'gemini-sa-key'  # The name of your secret
+  secretEnv: 'GOOGLE_APPLICATION_CREDENTIALS_JSON' # Environment variable name
+
+availableSecrets:
+- secret: 'gemini-sa-key'
