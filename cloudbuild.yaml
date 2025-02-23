@@ -27,7 +27,7 @@ steps:
   args: ['push', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest']
 
 # Deploy container image to Cloud Run
-- id: 'Deploy Image'
+- id: 'Deploy Image...'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-secrets', 'GOOGLE_API_KEY=projects/${_PROJECT_ID}/secrets/google-api-key/versions/latest']
