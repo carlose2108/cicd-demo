@@ -7,10 +7,8 @@ steps:
     - |
       echo "Verifying secrets are available:"
       echo "GOOGLE_API_KEY length: ${#_GOOGLE_API_KEY}"
-  secretEnv:
-    [
-      "_GOOGLE_API_KEY",
-    ]
+  secretEnv: ["GOOGLE_API_KEY"]
+
 # Clone the repository from GitHub
 - id: 'Cloning Repository...'
   name: 'gcr.io/cloud-builders/git'
