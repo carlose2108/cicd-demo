@@ -43,15 +43,13 @@ steps:
   args:
     - "-c"
     - |
-      echo "Deploying to Cloud Run..."
-      gcloud run deploy "${_SERVICE_NAME}" \
-      --image "us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest" \
-      --region "${_REGION}" \
-      --allow-unauthenticated \
-      --service-account "${_SERVICE_ACC}" \
-      --set-env-vars "GOOGLE_API_KEY=${GOOGLE_API_KEY}"
-  secretEnv:
-    - "GOOGLE_API_KEY"
+      gcloud run deploy '${_SERVICE_NAME}' \
+        --image 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest' \
+        --region '${_REGION}' \
+        --allow-unauthenticated \
+        --service-account '${_SERVICE_ACC}' \
+        --set-env-vars GOOGLE_API_KEY="$GOOGLE_API_KEY"
+  secretEnv: ['GOOGLE_API_KEY']
 
 # Upload test results
 - id: 'Upload Results to Cloud Storage'
