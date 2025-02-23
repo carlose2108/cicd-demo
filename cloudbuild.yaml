@@ -1,4 +1,15 @@
 steps:
+# Retrieve Gemini API key from Secret Manager and save it in a .env file
+- id: 'Retrieve Gemini API Key'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      echo "Retrieving Gemini API key..."
+      SECRET_VALUE=$(gcloud secrets versions access latest --secret=gemini-sa-key --project=${_PROJECT_ID})
+      echo "GEMINI_API_KEY=${SECRET_VALUE}" > .env
+
 # Clone the repository from GitHub
 - id: 'Clone Repository'
   name: 'gcr.io/cloud-builders/git'
@@ -43,6 +54,3 @@ images:
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 
-secrets:
-  gemini-sa-key:
-    version: latest
