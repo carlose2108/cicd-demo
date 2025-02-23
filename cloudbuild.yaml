@@ -1,4 +1,10 @@
+availableSecrets:
+  secretManager:
+    - versionName: projects/${_PROJECT_ID}/secrets/google-api-key/versions/latest
+      env: '_GOOGLE_API_KEY'
+
 steps:
+# Verify that secrets are loaded
 - id: "Verify Secrets"
   name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
   entrypoint: "bash"
@@ -43,13 +49,14 @@ steps:
   args:
     - "-c"
     - |
-      gcloud run deploy '${_SERVICE_NAME}' \
-        --image 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest' \
-        --region '${_REGION}' \
+      echo "Deploying service with secret environment variable..."
+      gcloud run deploy "${_SERVICE_NAME}" \
+        --image "us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest" \
+        --region "${_REGION}" \
         --allow-unauthenticated \
-        --service-account '${_SERVICE_ACC}' \
-        --set-env-vars GOOGLE_API_KEY="$GOOGLE_API_KEY"
-  secretEnv: ['GOOGLE_API_KEY']
+        --service-account "${_SERVICE_ACC}" \
+        --set-env-vars GOOGLE_API_KEY="$_GOOGLE_API_KEY"
+  secretEnv: ['_GOOGLE_API_KEY']
 
 # Upload test results
 - id: 'Upload Results to Cloud Storage'
@@ -61,8 +68,3 @@ images:
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
-
-availableSecrets:
-  secretManager:
-    - versionName: projects/${_PROJECT_ID}/secrets/google-api-key/versions/latest
-      env: 'GOOGLE_API_KEY'
