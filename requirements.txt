@@ -9,3 +9,4 @@ langchain
 pytest
 pytest-cov
 loguru
+google-cloud-secret-manager
