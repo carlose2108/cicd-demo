@@ -1,7 +1,7 @@
 availableSecrets:
   secretManager:
     - versionName: projects/${_PROJECT_ID}/secrets/google-api-key/versions/latest
-      env: "_GOOGLE_API_KEY"
+      env: "GOOGLE_API_KEY"
 
 steps:
 - id: "verify-secrets"
@@ -11,11 +11,11 @@ steps:
     - "-c"
     - |
       echo "Verifying secrets are available:"
-      echo "GOOGLE_API_KEY length: ${#_GOOGLE_API_KEY}"
+      echo "GOOGLE_API_KEY length: ${#GOOGLE_API_KEY}"
 
   secretEnv:
     [
-      "_GOOGLE_API_KEY",
+      "GOOGLE_API_KEY",
     ]
 # Clone the repository from GitHub
 - id: 'Cloning Repository...'
@@ -48,10 +48,10 @@ steps:
 - id: 'Deploying Image...'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-env-vars', 'GOOGLE_API_KEY=${_GOOGLE_API_KEY}']
+  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-env-vars', 'GOOGLE_API_KEY=${GOOGLE_API_KEY}']
   secretEnv:
     [
-      "_GOOGLE_API_KEY",
+      "GOOGLE_API_KEY",
     ]
 
 # Upload test results
