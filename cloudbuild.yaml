@@ -1,18 +1,4 @@
 steps:
-# Retrieve Google API key from Secret Manager and pass it as an env var
-- id: 'Retrieve Google API Key'
-  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      echo "Retrieving Google API key..."
-      GOOGLE_API_KEY=$(gcloud secrets versions access latest --secret=google-api-key --project=${_PROJECT_ID})
-      echo "Google API key retrieved"
-      # Make the key available to subsequent steps by exporting it as an environment variable
-      echo "GOOGLE_API_KEY=${GOOGLE_API_KEY}" >> $DEVSHELL_ENVIRONMENT
-
-
 # Clone the repository from GitHub
 - id: 'Clone Repository'
   name: 'gcr.io/cloud-builders/git'
@@ -44,7 +30,7 @@ steps:
 - id: 'Deploy Image'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-env-vars', 'GOOGLE_API_KEY=${GOOGLE_API_KEY}']
+  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-secrets', 'GOOGLE_API_KEY=projects/${_PROJECT_ID}/secrets/google-api-key/versions/latest']
 
 # Upload test results
 - id: 'Upload Results to Cloud Storage'
