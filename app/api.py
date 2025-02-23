@@ -10,6 +10,8 @@ from typing import List
 class InvoiceRisk(BaseModel):
     invoice_risk_predictions: List[int]
 
+class UserInput(BaseModel):
+    query: str = Field(..., description="User input")
 
 class InvoicePayload(BaseModel):
     invoice_id: List[int] = Field(..., description="")

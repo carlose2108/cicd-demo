@@ -8,11 +8,6 @@ import uvicorn
 from app.endpoints import app
 
 def main():
-    # Retrieve the Gemini API Key from Secret Manager
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    print("GEMINI_API_KEY:")
-    print(GEMINI_API_KEY)
-
     dataframe = pd.read_csv("data/dataTest.csv")
     dataframe = dataframe.drop(columns=["Unnamed: 0"])
 

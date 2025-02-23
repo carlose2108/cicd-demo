@@ -10,3 +10,4 @@ pytest
 pytest-cov
 loguru
 google-cloud-secret-manager
+langchain-google-genai
