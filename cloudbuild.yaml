@@ -1,5 +1,5 @@
 steps:
-# Retrieve Google API key from Secret Manager and pass it as an env var
+# Retrieve Google API key from Secret Manager and store it in a substitution
 - id: 'Retrieve Google API Key'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
@@ -7,8 +7,9 @@ steps:
     - '-c'
     - |
         echo "Retrieving Google API key..."
-        GOOGLE_API_KEY=$(gcloud secrets versions access latest --secret=google-api-key --project=${_PROJECT_ID})
-        echo "Google API key retrieved"
+        export GOOGLE_API_KEY=$(gcloud secrets versions access latest --secret=google-api-key --project=${_PROJECT_ID})
+        echo "GOOGLE_API_KEY=${GOOGLE_API_KEY}" > $HOME/.google_api_key  # Store the key in a file for the next step
+
 
 # Clone the repository from GitHub
 - id: 'Clone Repository'
