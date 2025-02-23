@@ -1,3 +1,8 @@
+availableSecrets:
+  secretManager:
+    - versionName: projects/${_PROJECT_ID}/secrets/google-api-key/versions/latest
+      env: "_GOOGLE_API_KEY"
+
 steps:
 # Clone the repository from GitHub
 - id: 'Clone Repository'
@@ -30,8 +35,11 @@ steps:
 - id: 'Deploy Image...'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}']
-  availableSecrets: ['google-api-key']
+  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-env-vars', 'GOOGLE_API_KEY=${_GOOGLE_API_KEY}']
+  secretEnv:
+    [
+      "_GOOGLE_API_KEY",
+    ]
 
 # Upload test results
 - id: 'Upload Results to Cloud Storage'
@@ -43,8 +51,3 @@ images:
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
-
-secrets:
-  google-api-key:
-    version: latest
-
