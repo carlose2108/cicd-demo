@@ -1,14 +1,4 @@
 steps:
-- id: 'Retrieve Google API Key'
-  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      echo "Retrieving Google API key..."
-      GOOGLE_API_KEY=$(gcloud secrets versions access latest --secret=google-api-key --project=${_PROJECT_ID})
-      echo "Google API key retrieved"
-
 # Clone the repository from GitHub
 - id: 'Clone Repository'
   name: 'gcr.io/cloud-builders/git'
@@ -40,7 +30,8 @@ steps:
 - id: 'Deploy Image...'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}', '--set-env-vars', 'GOOGLE_API_KEY=${GOOGLE_API_KEY}']
+  args: ['run', 'deploy', '${_SERVICE_NAME}', '--image', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '--region', '${_REGION}', '--allow-unauthenticated', '--service-account','${_SERVICE_ACC}']
+  availableSecrets: ['google-api-key']
 
 # Upload test results
 - id: 'Upload Results to Cloud Storage'
@@ -52,4 +43,8 @@ images:
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+secrets:
+  google-api-key:
+    version: latest
 
