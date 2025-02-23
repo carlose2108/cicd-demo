@@ -11,3 +11,6 @@ pytest-cov
 loguru
 google-cloud-secret-manager
 langchain-google-genai
+langchain-community
+pypdf
+chromadb
