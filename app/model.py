@@ -77,7 +77,7 @@ class Model:
             if df is None:
                 raise ValueError("Failed to impute missing values.")
 
-            X = df.drop(columns=["invoiceId", "invoice_risk"])
+            X = df.drop(columns=["invoiceId", "payerId", "invoice_risk"])
             y = df["invoice_risk"]
 
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.20, random_state=42)
@@ -109,7 +109,7 @@ class Model:
                 raise ValueError("Model has not been trained yet. Use the fit method first.")
 
             invoices_to_predict = self.df[self.df["invoiceId"].isin(invoice_ids)].drop(
-                columns=["invoiceId", "invoice_risk"])
+                columns=["invoiceId", "invoice_risk", "payerId"])
 
             predictions = self.model.predict(invoices_to_predict)
 
@@ -141,7 +141,7 @@ class Model:
                 raise ValueError("Column 'invoiceId' is missing in the DataFrame.")
 
             # Remove invoice id to predict
-            invoices_to_predict = dataframe[dataframe["invoiceId"].isin(invoice_ids)].drop(columns=["invoiceId"])
+            invoices_to_predict = dataframe[dataframe["invoiceId"].isin(invoice_ids)].drop(columns=["invoiceId", "payerId"])
 
             if "Unnamed: 0" in dataframe.columns:
                 invoices_to_predict = invoices_to_predict.drop(columns=["Unnamed: 0"])
