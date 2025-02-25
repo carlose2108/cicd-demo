@@ -31,16 +31,19 @@ steps:
       pip install -r requirements.txt
       pytest tests/ --junitxml=test-results.xml --cov=app --cov-report=term-missing --cov-fail-under=70
       ls -l
+  waitFor: ['Cloning Repository...']
 
 # Build the container image
 - id: 'Building Image...'
   name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest', '.']
+  waitFor: ['Running Unit Tests...']
 
 # Push the container image to Container Registry
 - id: 'Pushing Image...'
   name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest']
+  waitFor: ['Building Image...']
 
 - id: "Deploying Image...."
   name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -56,11 +59,13 @@ steps:
     '
   ]
   secretEnv: ['GOOGLE_API_KEY']
+  waitFor: ['Pushing Image...']
 
 # Upload test results
 - id: 'Upload Results to Cloud Storage'
   name: 'gcr.io/cloud-builders/gsutil'
   args: ['cp', '${_REPO_NAME}/test-results.xml', 'gs://cicd-reports-${_PROJECT_ID}/test-results/']
+  waitFor: ['Deploying Image....']
 
 images:
 - us-central1-docker.pkg.dev/${_PROJECT_ID}/api-demo/${_IMAGE}:latest
